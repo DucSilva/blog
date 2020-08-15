@@ -23,6 +23,8 @@ const newPostController = require('./controllers/newPost');
 const homeController = require('./controllers/home');
 const storePostController = require('./controllers/storePost');
 const getPostController = require('./controllers/getPost');
+const newUserController = require('./controllers/newUser');
+const storeUserController = require('./controllers/storeUser')
 
 //Đăng ký thư mục public.....
 app.use(express.static('public'))
@@ -34,12 +36,18 @@ app.listen(4000, () => {
 
 
 app.get('/', homeController)
+app.get('/auth/register', newUserController)
 
 app.get('/about', (req, res) => {
     res.render('about');
 })
+
 app.get('/contact', (req, res) => {
     res.render('contact');
+})
+
+app.get('/post', (req, res) => {
+    res.render('post');
 })
 
 app.get('/post/:id', getPostController)
@@ -58,6 +66,8 @@ app.post('/posts/store', (req, res) => {
         })
     })
 });
+
+app.post('/users/register', storeUserController);
 
 // app.post('/posts/store', storePostController);
 //middleware validate

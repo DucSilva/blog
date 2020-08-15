@@ -4,12 +4,12 @@ const BlogPostSchema = new Schema({
     title: String,
     body: String,
     username: String,
-    datePosted: {
+    datePosted: { /* can declare property type with an object like this because we need 'default' */
         type: Date,
         default: new Date()
     },
     image: String
 });
-
+//Export
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema);
 module.exports = BlogPost

@@ -10,15 +10,17 @@
   <%- include('layouts/navbar'); -%>
 
   <!-- Page Header -->
-  <header class="masthead" style="background-image: url('img/post-bg.jpg')">
+  <header class="masthead" style="background-image: url('<%= detailPost.image %>'); background-color: #cccccc;height: 500px;background-position: center;background-repeat: no-repeat;
+    background-size: contain;
+    position: relative;">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="post-heading">
-            <h1><%= detailPost.title %></h1>
-            <h2 class="subheading"><%= detailPost.body %></h2>
-            <span class="meta">Posted by
+          <div class="post-heading" style="text-align: left">
+            <h1 style="color: aqua;"><%= detailPost.title %></h1>
+            <h2 class="subheading" style="color: aqua;"><%= detailPost.body %></h2>
+            <span class="meta" style="color: white;">Posted by
               <a href="#"><%= detailPost.username %></a>
               on <%= detailPost.datePosted.toDateString() %></span>
           </div>

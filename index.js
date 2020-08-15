@@ -15,7 +15,14 @@ app.use(fileUpload());
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/my_database', { useNewUrlParser: true })
 
+//import models
 const BlogPost = require('./models/BlogPost.js')
+
+//import controllers
+const newPostController = require('./controllers/newPost');
+const homeController = require('./controllers/home');
+const storePostController = require('./controllers/storePost');
+const getPostController = require('./controllers/getPost');
 
 //Đăng ký thư mục public.....
 app.use(express.static('public'))
@@ -26,14 +33,7 @@ app.listen(4000, () => {
 })
 
 
-app.get('/', (request, response) => {
-    BlogPost.find({}, function (error, posts) {
-        console.log(posts);
-        response.render('index', {
-            blogposts: posts
-        });
-    })
-})
+app.get('/', homeController)
 
 app.get('/about', (req, res) => {
     res.render('about');
@@ -42,18 +42,9 @@ app.get('/contact', (req, res) => {
     res.render('contact');
 })
 
-app.get('/post/:id', (req, res) => {
-    BlogPost.findById(req.params.id, function (error, detailPost) {
-        res.render('post', {
-            detailPost
-        })
-    })
+app.get('/post/:id', getPostController)
 
-})
-
-app.get('/posts/new', (req, res) => {
-    res.render('create')
-})
+app.get('/posts/new', newPostController);
 
 app.post('/posts/store', (req, res) => {
     let image = req.files.image;
@@ -66,4 +57,9 @@ app.post('/posts/store', (req, res) => {
             res.redirect('/')
         })
     })
-})
+});
+
+// app.post('/posts/store', storePostController);
+//middleware validate
+const validateMiddleware = require("./middleware/validationMiddleware");
+app.use('/posts/store', validateMiddleware)

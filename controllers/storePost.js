@@ -1,8 +1,8 @@
-const BlogPost = require('../models/BlogPost')
-const path = require('path')
+const BlogPost = require('../models/BlogPost');
+const path = require('path');
 module.exports = (req, res) => {
     let image = req.files.image;
-    image.mv(path.resolve(__dirname, 'public/upload', image.name), function (
+    image.mv(path.resolve(__dirname, '../public/upload', image.name), function (
         error) {
         BlogPost.create({
             ...req.body,

@@ -32,6 +32,10 @@ const newUserController = require('./controllers/newUser');
 const storeUserController = require('./controllers/storeUser');
 const loginController = require('./controllers/login');
 const loginUserController = require('./controllers/loginUser');
+//middleware validate
+const validateMiddleware = require("./middleware/validationMiddleware");
+const authMiddleware = require('./middleware/authMiddleware');
+const redirectIfAuthenticatedMiddleware = require('./middleware/redirectIfAuthenticatedMiddleware');
 
 //Đăng ký thư mục public.....
 app.use(express.static('public'))
@@ -43,9 +47,8 @@ app.listen(4000, () => {
 
 
 app.get('/', homeController);
-app.get('/auth/register', newUserController);
-app.get('/auth/login', loginController);
-
+app.get('/auth/register', redirectIfAuthenticatedMiddleware, newUserController);
+app.get('/auth/login', redirectIfAuthenticatedMiddleware, loginController);
 
 app.get('/about', (req, res) => {
     res.render('about');
@@ -61,13 +64,12 @@ app.get('/post', (req, res) => {
 
 app.get('/post/:id', getPostController)
 
-app.get('/posts/new', newPostController);
+app.get('/posts/new', authMiddleware, newPostController);
 
-app.post('/users/register', storeUserController);
-app.post('/users/login', loginUserController);
+app.post('/users/register', redirectIfAuthenticatedMiddleware, storeUserController);
+app.post('/users/login', redirectIfAuthenticatedMiddleware, loginUserController);
 
 app.post('/posts/store', storePostController);
-//middleware validate
-const validateMiddleware = require("./middleware/validationMiddleware");
-app.use('/posts/store', validateMiddleware)
+
+app.use('/posts/store', authMiddleware, validateMiddleware)
 

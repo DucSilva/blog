@@ -32,6 +32,7 @@ const newUserController = require('./controllers/newUser');
 const storeUserController = require('./controllers/storeUser');
 const loginController = require('./controllers/login');
 const loginUserController = require('./controllers/loginUser');
+const logoutUserController = require('./controllers/logout');
 //middleware validate
 const validateMiddleware = require("./middleware/validationMiddleware");
 const authMiddleware = require('./middleware/authMiddleware');
@@ -44,6 +45,13 @@ app.use(express.static('public'))
 app.listen(4000, () => {
     console.log('OK. App listening on port 4000')
 })
+
+//Khai báo biến loggedIn global
+global.loggedIn = null;
+app.use('*', (req, res, next) => {
+    loggedIn = req.session.userId;
+    next();
+});
 
 
 app.get('/', homeController);
@@ -72,4 +80,5 @@ app.post('/users/login', redirectIfAuthenticatedMiddleware, loginUserController)
 app.post('/posts/store', storePostController);
 
 app.use('/posts/store', authMiddleware, validateMiddleware)
-
+app.get('/auth/logout', logoutUserController)
+app.use((req, res) => res.render('notfound'));

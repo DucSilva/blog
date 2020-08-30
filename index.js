@@ -15,10 +15,18 @@ app.use(bodyParser.raw());
 app.use(expressSession({
     secret: 'keyboard cat'
 }))
-// app.use(fileUpload());
+
+//require database URL from properties file
+var dbURL = require('./properties').DB;
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/my_database', { useNewUrlParser: true })
+mongoose.connect(dbURL, {
+    useNewUrlParser: true, useUnifiedTopology: true
+}).then(() => {
+    console.log('connected to db')
+}).catch((error) => {
+    console.log(error)
+})
 
 const fileUpload = require('express-fileupload')
 app.use(fileUpload());
